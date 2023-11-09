@@ -1,0 +1,124 @@
+version: 1.0.0
+
+# go-sdk 那部分
+client:
+  organization: Org1  # 这个应用程序属于哪个组织，这里就填哪个组织的组织名
+  logging: #日志信息
+    level: info
+  cryptoconfig:  #msp证书的干路径，crypto-config.yaml文件的路径，不需要填写.yaml
+    path: /gopath/src/hyperledger/fabric-sdk-go-test/conf/crypto-config
+  credentialStore: # 一些SDK可插拔的KV存储，默认即可
+    path: /tmp/state-store
+    cryptoStore:
+      path: /tmp/msp
+  #这里配置的是加密组件的一些属性，默认即可
+  BCCSP:
+    security:
+      enabled: true
+      default:
+        provider: "SW"
+      hashAlgorithm: "SHA2"
+      softVerify: true
+      level: 256
+  tlsCerts:
+    # [Optional]. Use system certificate pool when connecting to peers, orderers (for negotiating TLS) Default: false
+    systemCertPool: false
+#通道相关配置
+channels:
+  zlktchannel: # 通道名称
+#    orderers:
+#      - orderer.example.com # 多个节点可以继续向下配置
+    peers:
+    #填写这个应用程序所属组织的Peer的域名  和client中的organization组织保持一致，上面填写的是Org1
+      peer0.org1.example.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+      peer1.org1.example.com:
+        endorsingPeer: true
+        chaincodeQuery: true
+        ledgerQuery: true
+        eventSource: true
+    #可选的策略配置，默认即可
+    policies:
+      queryChannelConfig:
+        minResponses: 1
+        maxTargets: 1
+        retryOpts:
+          attempts: 5
+          initialBackoff: 500ms
+          maxBackoff: 5s
+          backoffFactor: 2.0
+#组织配置，列举了该网络的所有组织
+organizations:
+  #组织的名称
+  org1:
+    #该组织的MSPID
+    mspid: Org1MSP
+    #这个组织的MSP证书路径
+    cryptoPath: /gopath/src/hyperledger/fabric-sdk-go-test/conf/crypto-config/peerOrganizations/org1.example.com/users/Admin@org1.example.com/msp
+    #这个组织下属的节点
+    peers:
+      - peer0.org1.example.com
+      - peer1.org1.example.com
+#    certificateAuthorities:
+    #-ca.org1.example.com
+  org2:
+    #该组织的MSPID
+    mspid: Org2MSP
+    #这个组织的MSP证书路径
+    cryptoPath: /gopath/src/hyperledger/fabric-sdk-go-test/conf/crypto-config/peerOrganizations/org2.example.com/users/Admin@org2.example.com/msp
+    #这个组织下属的节点
+    peers:
+      - peer0.org2.example.com
+      - peer1.org2.example.com
+#    certificateAuthorities:
+    #-ca.org1.example.com
+  OrdererOrg: # orderer 组织
+    mspid: OrdererMSP
+    cryptoPath: /gopath/src/hyperledger/fabric-sdk-go-test/conf/crypto-config/ordererOrganizations/example.com/users/Admin@example.com/msp
+
+#指定orderer
+orderers:
+  orderer.blockchainrealestate.com:
+    url: 127.0.0.1:7050 #grpcs://localhost:7050
+    #grpc配置
+    grpcOptions:
+      ssl-target-name-override: orderer.example.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: true #非tls连接
+    tlsCACerts:
+      path: /gopath/src/hyperledger/fabric-sdk-go-test/conf/crypto-config/ordererOrganizations/example.com/tlsca/tlsca.example.com-cert.pem
+
+#指定peer
+peers:
+  peer0.org1.example.com:
+    url: grpcs://127.0.0.1:7051  #grpcs://localhost:7051,此URL用于发送背书和查询请求
+    eventUrl: grpcs://127.0.0.1:7053 #此URL用于连接EventHub并注册事件侦听器
+    #grpc配置
+    grpcOptions:
+      ssl-target-name-override: peer0.org1.example.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: true
+    tlsCACerts:
+      path: /gopath/src/hyperledger/fabric-sdk-go-test/conf/crypto-config/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem
+  peer1.org1.example.com:
+    url: grpcs://127.0.0.1:8051  #grpcs://1ocalhost:27051,此URL用于发送背书和查询请求
+    eventUrl: grpcs://127.0.0.1:8053 #此URL用于连接EventHub并注册事件侦听器
+    #grpc配置
+    grpcOptions:
+      ssl-target-name-override: peer1.org1.example.com
+      keep-alive-time: 0s
+      keep-alive-timeout: 20s
+      keep-alive-permit: false
+      fail-fast: false
+      allow-insecure: true
+    tlsCACerts:
+      path: /gopath/src/hyperledger/fabric-sdk-go-test/conf/crypto-config/peerOrganizations/org1.example.com/tlsca/tlsca.org1.example.com-cert.pem

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="66f71fd3-4d9f-4f1c-8cd0-4d707ae9fb05" name="192.168.56.103">
+        <fileTransfer rootFolder="/gopath/src/hyperledger/fabric-sdk-go-test" accessType="SFTP" host="192.168.56.103" port="22" sshConfigId="13469f30-7848-4654-b5e4-28442da526e3" sshConfig="root@192.168.56.103:22 password">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" keepAliveTimeout="0" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
