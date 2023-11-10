@@ -35,8 +35,8 @@ func main() {
 	// first_chaincode1  icba  cmbc
 	//查询链码
 	respQuery, err := cc.Query(channel.Request{
-		ChaincodeID: chainCodeName,         //链码名称
-		Fcn:         "query",               // 函数名称
+		ChaincodeID: chainCodeName,            //链码名称
+		Fcn:         "query",                  // 函数名称
 		Args:        [][]byte{[]byte("cmbc")}, // 参数
 	}, channel.WithTargetEndpoints("peer0.org1.example.com"))
 
