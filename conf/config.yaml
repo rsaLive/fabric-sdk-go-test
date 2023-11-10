@@ -26,8 +26,8 @@ client:
 #通道相关配置
 channels:
   zlktchannel: # 通道名称
-#    orderers:
-#      - orderer.example.com # 多个节点可以继续向下配置
+    orderers:
+      - orderer.example.com # 多个节点可以继续向下配置
     peers:
     #填写这个应用程序所属组织的Peer的域名  和client中的organization组织保持一致，上面填写的是Org1
       peer0.org1.example.com:
@@ -81,8 +81,8 @@ organizations:
 
 #指定orderer
 orderers:
-  orderer.blockchainrealestate.com:
-    url: 127.0.0.1:7050 #grpcs://localhost:7050
+  orderer.example.com:
+    url: grpcs://localhost:7050 #grpcs://localhost:7050
     #grpc配置
     grpcOptions:
       ssl-target-name-override: orderer.example.com
