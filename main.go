@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/hyperledger/fabric-sdk-go/pkg/client/channel"
+	"github.com/hyperledger/fabric-sdk-go/pkg/client/ledger"
 	"github.com/hyperledger/fabric-sdk-go/pkg/core/config"
 	"github.com/hyperledger/fabric-sdk-go/pkg/fabsdk"
 )
@@ -44,6 +45,13 @@ func main() {
 	fmt.Printf("respQuery response: %v\n", respQuery.Responses)
 	//增删改
 
+	// 查询区块高度
+	ledgerClient, err := ledger.New(ctx)
+
+	blockchainInfo, err := ledgerClient.QueryInfo()
+
+	fmt.Println("区块高度是：", blockchainInfo.BCI.Height)
+
 	/*
 		targets := []fab.Peer{
 				mocks.NewMockPeer("Org1MSP", "peer0.org1.example.com"),
@@ -56,7 +64,8 @@ func main() {
 		}, channel.WithTargets(targets...))
 	*/
 
-	respExecute, err := cc.Execute(channel.Request{
+	// 转账
+	/*respExecute, err := cc.Execute(channel.Request{
 		ChaincodeID: chainCodeName,                                          //链码名称
 		Fcn:         "invoke",                                               // 函数名称
 		Args:        [][]byte{[]byte("cmbc"), []byte("icba"), []byte("10")}, // 参数
@@ -66,5 +75,5 @@ func main() {
 		fmt.Println("respExecute err", err.Error())
 		fmt.Println("----------------\n")
 	}
-	fmt.Println("respExecute", respExecute.Payload)
+	fmt.Println("respExecute", respExecute.Payload)*/
 }
